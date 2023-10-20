@@ -2,8 +2,7 @@
 $a = Get-MgSubscribedSku | Select -Property SkuID, SkuPartNumber, ConsumedUnits -ExpandProperty PrepaidUnits | Sort-Object -Descending -Property ConsumedUnits
 
 #Download the CSV file from Microsoft that contains the product names and service plan identifiers for licensing
-#$b = Invoke-RestMethod -Method Get -Uri "https://download.microsoft.com/download/e/3/e/e3e9faf2-f28b-490a-9ada-c6089a1fc5b0/Product%20names%20and%20service%20plan%20identifiers%20for%20licensing.csv" | ConvertFrom-Csv
-$b = Import-CSV -Path E:\Service_Skus_Service_Plans.csv
+$b = Invoke-RestMethod -Method Get -Uri "https://download.microsoft.com/download/e/3/e/e3e9faf2-f28b-490a-9ada-c6089a1fc5b0/Product%20names%20and%20service%20plan%20identifiers%20for%20licensing.csv" | ConvertFrom-Csv
 
 #Select only the skuId and Product_Display_Name properties from the CSV file and remove any duplicates
 $b = $b | select -Property @{Name = 'skuId'; Expression = {($_.GUID)}}, Product_Display_Name | Select skuId,Product_Display_Name -Unique
