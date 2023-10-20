@@ -13,7 +13,7 @@ $groupName = "groupM365-Licenses"
 Get-MgGroup -Filter "displayName eq '$groupName'" -ConsistencyLevel eventual
 
 # Specify the groupID
-$groupid = 'ecbfe9cc-3186-49e4-8f93-cbbc58bec56a'
+$groupid = '000000-0000-0000-0000-000000000000'
 
 #Get the count of group members
 $GroupMemberCount = get-mggroupmembercount -groupid $groupid -ConsistencyLevel eventual
