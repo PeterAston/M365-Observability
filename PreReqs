@@ -1,0 +1,12 @@
+#Create an Azure AD Application that has appropriate Graph API permissions for data that you'd like to visualise in SquaredUp. 
+ The following seem to cover most eventualites and are all read-only:
+    Application.Read.All, Directory.Read.All, Group.Read.All, Organization.Read.All, ServiceHealth.Read.All, ServiceMessage.Read.All, User.Read.All
+ You'll need the ClientId and TenantId. 
+ You'll also need to upload a certificate from your SquaredUp webserver.
+
+#Create a PowerShell profile in SquaredUp for each Tenant you want to connect to.
+ This is where you can store your connection to MgGraph for each Tenant so that it's not visible in SquaredUp to end-users:
+    # Connect to the M365 Tenant
+      Connect-MgGraph -ClientId 00000000-0000-0000-0000-000000000000 -TenantId 00000000-0000-0000-0000-000000000000 -CertificateThumbrint 0000000000000000000000000000000000000000
+
+#Once you have the above, you can create dashboards with PowerShell tiles to pull data on demand from Microsoft Graph using Graph PowerShell.
