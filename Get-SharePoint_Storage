@@ -1,0 +1,13 @@
+#Period
+$periodId = 'D7'
+
+# Get SharePoint storage usage and save to CSV file
+Get-MgReportSharePointSiteUsageStorage -Period $periodId -OutFile 'E:\M365Storage\SharepointScalar.csv' 
+
+# Remove spaces in SharePoint CSV headers
+$Sharepoint = Get-Content 'E:\M365Storage\SharepointScalar.csv' 
+$Sharepoint[0] = $Sharepoint[0] -replace " ", ""
+$Sharepoint_updated = $Sharepoint | Out-File 'E:\M365Storage\SharepointScalar_updated.csv'
+
+$report = import-csv -LiteralPath 'E:\M365Storage\SharepointScalar_updated.csv'-Delimiter ','
+$report | select-object 'storageused(byte)' -First 1
