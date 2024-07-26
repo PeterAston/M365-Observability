@@ -8,6 +8,7 @@ $headers = @{
     'Authorization' = "Bearer $($token.AccessToken)"
     'ConsistencyLevel' = "eventual"
 }
+Connect-MgGraph -ClientID xxx  -TenantId xxx -CertificateThumbprint xxx
 ##############################################
 $siteUrl = "https://bham.sharepoint.com/sites/intranet"
 $periodId = 'D7' #Options are D7, D30. D90
