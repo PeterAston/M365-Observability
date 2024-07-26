@@ -9,13 +9,13 @@ $headers = @{
     'ConsistencyLevel' = "eventual"
 }
 ##############################################
-$siteUrl = "https://xxxx.sharepoint.com/sites/xxxxxx"
+$siteUrl = "https://bham.sharepoint.com/sites/intranet"
 $periodId = 'D7' #Options are D7, D30. D90
 
 # Get the site ID from the URL
-$siteRelativeUrl = $siteUrl.Replace("https://xxxx.sharepoint.com", "")
+$siteRelativeUrl = $siteUrl.Replace("https://bham.sharepoint.com", "")
 $siteIdResponse = (Invoke-WebRequest -Uri "https://graph.microsoft.com/v1.0/sites/bham.sharepoint.com:$siteRelativeUrl" -Headers $headers).Content | ConvertFrom-Json
-$siteId = $siteIdResponse.id
+$siteId = $siteIdResponse.id.Split(',')[1]  # Extract the correct GUID
 
 # Debug: Print the site ID
 Write-Output "Site ID: $siteId"
@@ -24,24 +24,30 @@ if ($siteId) {
     # Get the site by ID
     $site = Get-MgSite -SiteId $siteId
 
-    # Get site usage reports (adjust the period as needed)
-    $reportUrl = "https://graph.microsoft.com/v1.0/reports/getSharePointSiteUsagePages(period='$periodId')"
-    $outputFilePath = "E:\M365Storage\IntranetSharePointSiteUsagePages.csv"
-    Invoke-MgGraphRequest -Method Get -Uri $reportUrl -Headers $headers -OutputFilePath $outputFilePath
+    # Get site usage details
+    $siteUsageUrl = "https://graph.microsoft.com/v1.0/sites/$siteId/analytics/lastSevenDays"
+    $siteUsageResponse = Invoke-WebRequest -Uri $siteUsageUrl -Headers $headers | ConvertFrom-Json
 
-    # Read the CSV file and filter for the specific site
-    $report = Import-Csv -Path $outputFilePath
-
-    # Debug: Print the first few lines of the report
-    $report | Select-Object -First 5 | Format-Table
-
-    # Debug: Print the site IDs from the report
-    $report | Select-Object -Property SiteId | Format-Table
-
-    $siteUsage = $report | Where-Object { $_.SiteId -eq $siteId }
+    # Extract relevant data
+    $actionCount = $siteUsageResponse.access.actionCount
+    $actorCount = $siteUsageResponse.access.actorCount
+    $timeSpentInSeconds = $siteUsageResponse.access.timeSpentInSeconds
 
     # Display the site usage statistics
-    $siteUsage | Format-Table -Property ReportDate, PageViewCount
+    Write-Output "Action Count: $actionCount"
+    Write-Output "Actor Count: $actorCount"
+    Write-Output "Time Spent (seconds): $timeSpentInSeconds"
 } else {
     Write-Warning "Site ID not found for URL '$siteUrl'"
 }
+
+
+Here’s what each of these terms means in the context of SharePoint site analytics:
+
+Action Count:
+This represents the total number of actions performed on the site. Actions can include activities such as viewing, editing, sharing, or deleting files and pages.
+Actor Count:
+This indicates the number of unique users (actors) who have performed actions on the site. It helps you understand how many different users are engaging with the site.
+Time Spent:
+This is the total amount of time (in seconds) that users have spent performing actions on the site. It provides insight into how much time users are spending on the site, which can be useful for understanding engagement levels.
+These metrics help you gauge the level of activity and engagement on your SharePoint site over a specified period.
