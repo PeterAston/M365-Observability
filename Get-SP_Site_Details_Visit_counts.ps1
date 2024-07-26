@@ -10,12 +10,12 @@ $headers = @{
 }
 Connect-MgGraph -ClientID xxx  -TenantId xxx -CertificateThumbprint xxx
 ##############################################
-$siteUrl = "https://bham.sharepoint.com/sites/intranet"
+$siteUrl = "https://xxxx.sharepoint.com/sites/xxxxxxxx"
 $periodId = 'D7' #Options are D7, D30. D90
 
 # Get the site ID from the URL
-$siteRelativeUrl = $siteUrl.Replace("https://bham.sharepoint.com", "")
-$siteIdResponse = (Invoke-WebRequest -Uri "https://graph.microsoft.com/v1.0/sites/bham.sharepoint.com:$siteRelativeUrl" -Headers $headers).Content | ConvertFrom-Json
+$siteRelativeUrl = $siteUrl.Replace("https://xxxx.sharepoint.com", "")
+$siteIdResponse = (Invoke-WebRequest -Uri "https://graph.microsoft.com/v1.0/sites/xxxx.sharepoint.com:$siteRelativeUrl" -Headers $headers).Content | ConvertFrom-Json
 $siteId = $siteIdResponse.id.Split(',')[1]  # Extract the correct GUID
 
 # Debug: Print the site ID
@@ -43,7 +43,7 @@ if ($siteId) {
 }
 
 
-Here’s what each of these terms means in the context of SharePoint site analytics:
+<# Here’s what each of these terms means in the context of SharePoint site analytics:
 
 Action Count:
 This represents the total number of actions performed on the site. Actions can include activities such as viewing, editing, sharing, or deleting files and pages.
@@ -52,3 +52,4 @@ This indicates the number of unique users (actors) who have performed actions on
 Time Spent:
 This is the total amount of time (in seconds) that users have spent performing actions on the site. It provides insight into how much time users are spending on the site, which can be useful for understanding engagement levels.
 These metrics help you gauge the level of activity and engagement on your SharePoint site over a specified period.
+#>
