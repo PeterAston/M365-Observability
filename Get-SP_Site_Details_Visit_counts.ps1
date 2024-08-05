@@ -1,4 +1,6 @@
 # Label: Get SharePoint Site Details by URL, and get Site Visit Counts
+########### This doesn't work as intended - he $reportUrl in the script currently points to a general SharePoint site usage report and doesn’t specify a particular site. 
+########### The getSharePointSiteUsagePages endpoint provides a report on the number of unique pages visited for all sites in the last 7 days.
 $tenantId = ""
 $clientId = ""
 $certificate = Get-Item Cert:\LocalMachine\My\
